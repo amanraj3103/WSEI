@@ -2,7 +2,10 @@ services:
   - type: web
     name: whatsapp-lead-assistant
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      pip install -r requirements.txt
+      mkdir -p logs
+      mkdir -p billing_data
     startCommand: python main_simple.py
     envVars:
       - key: PYTHON_VERSION
@@ -10,4 +13,5 @@ services:
       - key: PORT
         value: 8000
     healthCheckPath: /health
-    autoDeploy: true 
+    autoDeploy: true
+    plan: free 
