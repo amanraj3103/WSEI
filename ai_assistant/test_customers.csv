@@ -1,0 +1,4 @@
+Customer ID,Name,Email,Company,Plan,Monthly Price,Status
+CUST001,John Smith,john@smithconsulting.com,Smith Consulting,basic,29.0,paid
+CUST002,Sarah Johnson,sarah@techstartup.com,TechStartup Inc,pro,79.0,paid
+CUST003,Mike Wilson,mike@enterprise.com,Enterprise Corp,enterprise,199.0,pending

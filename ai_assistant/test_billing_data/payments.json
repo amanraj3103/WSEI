@@ -1,0 +1,22 @@
+[
+  {
+    "payment_id": "PAYTRX001",
+    "customer_id": "CUST001",
+    "amount": 29.0,
+    "payment_date": "2025-07-31",
+    "payment_method": "bank_transfer",
+    "reference": "TRX001",
+    "status": "received",
+    "notes": ""
+  },
+  {
+    "payment_id": "PAYTRX002",
+    "customer_id": "CUST002",
+    "amount": 79.0,
+    "payment_date": "2025-07-31",
+    "payment_method": "paypal",
+    "reference": "TRX002",
+    "status": "received",
+    "notes": ""
+  }
+]
