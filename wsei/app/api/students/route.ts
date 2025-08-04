@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔍 API: Fetching students from database...')
+    
     const students = await prisma.student.findMany({
       include: {
         user: {
@@ -19,7 +21,9 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({
+    console.log(`✅ API: Found ${students.length} students in database`)
+
+    const response = {
       success: true,
       students: students.map(student => ({
         id: student.id,
@@ -35,10 +39,13 @@ export async function GET(request: NextRequest) {
         status: student.status,
         user: student.user
       }))
-    })
+    }
+
+    console.log('✅ API: Returning students data:', response.students.length, 'students')
+    return NextResponse.json(response)
 
   } catch (error) {
-    console.error('Error fetching students:', error)
+    console.error('❌ API: Error fetching students:', error)
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

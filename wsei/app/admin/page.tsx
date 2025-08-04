@@ -42,15 +42,20 @@ export default function AdminDashboard() {
 
   const fetchStudents = async () => {
     try {
+      console.log('🔍 Frontend: Fetching students from API...')
       const response = await fetch('/api/students')
       
+      console.log('🔍 Frontend: Response status:', response.status)
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch students')
+        throw new Error(`Failed to fetch students: ${response.status}`)
       }
       
       const data = await response.json()
+      console.log('🔍 Frontend: Response data:', data)
       
       if (data.success && data.students) {
+        console.log(`✅ Frontend: Setting ${data.students.length} students`)
         setStudents(data.students)
         setFilteredStudents(data.students)
       } else {
@@ -59,7 +64,7 @@ export default function AdminDashboard() {
       
       setLoading(false)
     } catch (error) {
-      console.error('Error fetching students:', error)
+      console.error('❌ Frontend: Error fetching students:', error)
       setLoading(false)
     }
   }

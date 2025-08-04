@@ -13,7 +13,8 @@
     "db:studio": "prisma studio",
     "init-admin": "tsx scripts/init-admin.ts",
     "init-student": "tsx scripts/init-student.ts",
-    "update-passwords": "tsx scripts/update-passwords.ts"
+    "update-passwords": "tsx scripts/update-passwords.ts",
+    "setup-production": "tsx scripts/setup-production-db.ts"
   },
   "dependencies": {
     "next": "14.0.4",
