@@ -47,5 +47,8 @@ flake8==5.0.4
 # Monitoring & Logging
 structlog==23.1.0
 
+# Telegram Bot (for testing)
+python-telegram-bot==20.3
+
 # Environment
 python-decouple==3.8 
