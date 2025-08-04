@@ -40,31 +40,31 @@ export default function AdminDashboard() {
   })
   const [registeringStudent, setRegisteringStudent] = useState(false)
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await fetch('/api/students')
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch students')
-        }
-        
-        const data = await response.json()
-        
-        if (data.success && data.students) {
-          setStudents(data.students)
-          setFilteredStudents(data.students)
-        } else {
-          throw new Error('Invalid response format')
-        }
-        
-        setLoading(false)
-      } catch (error) {
-        console.error('Error fetching students:', error)
-        setLoading(false)
+  const fetchStudents = async () => {
+    try {
+      const response = await fetch('/api/students')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch students')
       }
+      
+      const data = await response.json()
+      
+      if (data.success && data.students) {
+        setStudents(data.students)
+        setFilteredStudents(data.students)
+      } else {
+        throw new Error('Invalid response format')
+      }
+      
+      setLoading(false)
+    } catch (error) {
+      console.error('Error fetching students:', error)
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchStudents()
   }, [])
 
