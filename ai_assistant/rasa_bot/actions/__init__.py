@@ -1,1 +1,0 @@
-# Custom actions package for WhatsApp Lead Assistant 
