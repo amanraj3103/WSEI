@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { LogOut, Users, Search, ArrowUpDown, Filter, GraduationCap, Mail, Phone, Trash2 } from 'lucide-react'
+import { LogOut, Users, Search, ArrowUpDown, Filter, GraduationCap, Mail, Phone, Trash2, RefreshCw } from 'lucide-react'
 
 interface Student {
   id: string
@@ -39,16 +39,26 @@ export default function AdminDashboard() {
     semester: ''
   })
   const [registeringStudent, setRegisteringStudent] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchStudents = async () => {
     try {
       console.log('🔍 Frontend: Fetching students from API...')
-      const response = await fetch('/api/students')
+      setError(null)
+      setLoading(true)
+      
+      const response = await fetch('/api/students', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache' // Force fresh data
+      })
       
       console.log('🔍 Frontend: Response status:', response.status)
       
       if (!response.ok) {
-        throw new Error(`Failed to fetch students: ${response.status}`)
+        throw new Error(`Failed to fetch students: ${response.status} ${response.statusText}`)
       }
       
       const data = await response.json()
@@ -58,20 +68,31 @@ export default function AdminDashboard() {
         console.log(`✅ Frontend: Setting ${data.students.length} students`)
         setStudents(data.students)
         setFilteredStudents(data.students)
+        setError(null)
       } else {
-        throw new Error('Invalid response format')
+        throw new Error('Invalid response format: missing success or students data')
       }
       
       setLoading(false)
     } catch (error) {
       console.error('❌ Frontend: Error fetching students:', error)
+      setError(error instanceof Error ? error.message : 'Failed to fetch students')
       setLoading(false)
     }
   }
 
   useEffect(() => {
+    console.log('🔄 Admin panel: Component mounted, fetching students...')
     fetchStudents()
   }, [])
+
+  // Add a retry mechanism
+  const retryFetch = () => {
+    console.log('🔄 Admin panel: Retrying fetch...')
+    setError(null)
+    setLoading(true)
+    fetchStudents()
+  }
 
   useEffect(() => {
     let filtered = students
@@ -270,6 +291,25 @@ export default function AdminDashboard() {
     )
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <p className="font-bold">Error Loading Data</p>
+            <p className="text-sm">{error}</p>
+          </div>
+          <button
+            onClick={retryFetch}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -288,6 +328,14 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              <button
+                onClick={retryFetch}
+                disabled={loading}
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
               <button
                 onClick={() => setShowRegistrationModal(true)}
                 className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
